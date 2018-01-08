@@ -2,15 +2,7 @@ package cs.agh.lab;
 
 import java.util.regex.Pattern;
 
-/*private Pattern articlePattern = Pattern.compile("^(Art)\\.\\s+([0-9]+[A-z]*)\\.\\s+([0-9]+)?\\.?(.*)");
-private Pattern chapterPattern = Pattern.compile("^(Rozdział)\\s+([0-9|A-z]+)");
-private Pattern sectionPattern = Pattern.compile("^(DZIAŁ)\\s+([0-9|A-z]+)");
 
-private Pattern uppercaseTextPattern = Pattern.compile("^[\\p{Lu}]+ .*$");
-private Pattern paragraphPattern = Pattern.compile("^(\\d+)\\..*");
-private Pattern pointPattern = Pattern.compile("^(\\d+)\\).*");
-private Pattern literalPattern = Pattern.compile("^([a-z])\\).*");
-*/
 public enum DocumentSectionType {
     MAIN, ARTICLE, SECTION, CHAPTER, SUBCHAPTER, PARAGRAPH, POINT, LITERAL;
 

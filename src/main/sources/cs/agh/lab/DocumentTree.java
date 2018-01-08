@@ -1,6 +1,8 @@
 package cs.agh.lab;
 
+import javax.print.Doc;
 import java.util.ArrayList;
+import java.util.function.DoubleConsumer;
 
 
 public class DocumentTree extends Tree<ArrayList<String>> {
@@ -46,19 +48,86 @@ public class DocumentTree extends Tree<ArrayList<String>> {
     // DFS in Tree, overload here
     // BFS in Tree, overload here
 
-    public void print() {
-        print("", true);
+    public void printTree() {
+        printTree("", true);
     }
 
-    private void print(String prefix, boolean isTail) {
+    private void printTree(String prefix, boolean isTail) {
         System.out.println(prefix + (isTail ? "└── " : "├── ") + this.type.toString() + " "+  this.index);
         for (int i = 0; i < children.size() - 1; i++) {
             DocumentTree child = (DocumentTree)this.children.get(i);
-            child.print(prefix + (isTail ? "    " : "│   "), false);
+            child.printTree(prefix + (isTail ? "    " : "│   "), false);
         }
         if (children.size() > 0) {
             DocumentTree child = (DocumentTree)this.children.get(children.size() - 1);
-                    child.print(prefix + (isTail ?"    " : "│   "), true);
+                    child.printTree(prefix + (isTail ?"    " : "│   "), true);
+        }
+    }
+
+    public void printTOC() {
+        if(this.deeperThanOrEqual(DocumentSectionType.ARTICLE)){return;}
+
+        String articlesRange = (this.type == DocumentSectionType.MAIN) ? "" : "(art. "+ this.firstArticle().getIndex() + " - " + this.lastArticle().getIndex() +")";
+        String index = (this.type == DocumentSectionType.MAIN || this.type == DocumentSectionType.SUBCHAPTER) ? this.index : this.index+".";
+        System.out.println(this.type.toString() + " " + index + " " + this.concatenateData() + " " + articlesRange);
+        for (int i = 0; i < children.size(); i++) {
+            DocumentTree child = (DocumentTree)this.children.get(i);
+            child.printTOC();
+        }
+    }
+
+    private DocumentTree firstArticle(){
+        if(this.type == DocumentSectionType.ARTICLE){return this;}
+        return ((DocumentTree)this.children.get(0)).firstArticle();
+    }
+
+    private DocumentTree lastArticle(){
+        if(this.type == DocumentSectionType.ARTICLE){return this;}
+        return ((DocumentTree)this.children.get(children.size() - 1)).lastArticle();
+    }
+
+    private String concatenateData(){
+        StringBuilder concatenated = new StringBuilder(512);
+        for(String line : this.data){
+            concatenated.append(" ").append(line);
+        }
+        return concatenated.toString();
+    }
+
+    private boolean deeperThanOrEqual(DocumentSectionType type){
+        if(this.type == type){ return true;}
+        if(this.parent == null){ return false; }
+        return ((DocumentTree)this.parent).deeperThanOrEqual(type);
+    }
+
+    public DocumentTree find(DocumentSectionType type, String index){
+        if(this.type == type && this.index.equals(index)){return this;}
+        for(Tree child : this.children){
+            ((DocumentTree)child).find(type, index);
+        }
+        return null;
+    }
+
+    public DocumentTree shallowFind(DocumentSectionType type, String index){
+        if(this.type == type && this.index == index){return this;}
+        for(Tree child : this.children){
+            if(((DocumentTree)child).getType() == type && ((DocumentTree)child).getIndex().equals(index)){
+                return (DocumentTree)child;
+            }
+        }
+        return null;
+    }
+
+    public void print(){
+        System.out.print(this.type.toString() + " " + this.index);
+        System.out.print((this.type == DocumentSectionType.POINT || this.type == DocumentSectionType.LITERAL) ? ")" : ".");
+        System.out.println(this.concatenateData());
+    }
+
+    public void deepPrint(){
+        this.print();
+        for(Tree child : this.children){
+            ((DocumentTree)child).deepPrint();
         }
     }
 }

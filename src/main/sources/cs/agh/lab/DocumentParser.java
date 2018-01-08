@@ -1,46 +1,27 @@
 package cs.agh.lab;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
-public class Parser {
-    // \p{L} \p{Ll} \p{Lu}  <-- wszystkie litery we wszystkich alfabetach w UTF8
-    private Pattern datePattern = Pattern.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}$");
-    private Pattern officePattern = Pattern.compile("^.Kancelaria Sejmu.*");
-    private Pattern randomCharactersPattern = Pattern.compile("^[0-9|A-z]$");
-    //Move to filter ^^^^^
-
+public class DocumentParser {
     private String[] document;
     private DocumentTree root;
 
-    public Parser(String fileName){
-        try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
-            this.document = stream
-                    .filter(line -> !datePattern.matcher(line).matches())
-                    .filter(line -> !officePattern.matcher(line).matches())
-                    .filter(line -> !randomCharactersPattern.matcher(line).matches())
-                    .toArray(String[]::new);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error opening file " + fileName);
-        }
+    public DocumentParser(String fileName){
+        this.document = DocumentFilter.filter(fileName);
         this.root = new DocumentTree(DocumentSectionType.MAIN, null, null);
         Integer childStart = this.findNewElement(0, this.document.length - 1);
         if(this.document[childStart].contentEquals("KONSTYTUCJA") && childStart+1 < this.document.length){
             this.document[childStart] += " " + this.document[childStart+1];
             this.document[childStart+1] = "";
         }
+        this.removeTrailingDashes();
     }
 
-    public Parser(DocumentTree root){
+    public DocumentParser(DocumentTree root){
         this.root = root;
         this.document = root.getData().toArray(new String[root.getData().size()]);
     }
@@ -49,21 +30,10 @@ public class Parser {
     //Take document, detect first level, detect end of element, create element, parse element
     public void parse(){
 
-      //  Matcher matcher = this.root.getType().getPattern().matcher(this.document[0]);
-/*
-        if(this.root.getType() == DocumentSectionType.ARTICLE && matcher.group(2) != null){
-
-        }
-*/
-       // this.root.setIndex(matcher.group(1));
-
-
-
         Integer childStart = this.findNewElement(0, this.document.length - 1);
         if(childStart == null){
             return;
         }
-        //System.out.println("Data ends = "+this.document[childStart]);
 
         this.root.removeData();
         this.copyTextToDocumentTree(this.root, 0, childStart - 1);
@@ -80,16 +50,22 @@ public class Parser {
             DocumentTree child = new DocumentTree(childType, childMatcher.group(1), null);
 
             //now clear first line
-            try {
-                this.document[childStart] = childMatcher.group(2) + " " +childMatcher.group(3);
+            try{
+                String group2 = childMatcher.group(2);
+                this.document[childStart] = group2 != null ? group2 + " " : "";
             }catch(IndexOutOfBoundsException e){
                 this.document[childStart] = "";
+            }
+            try {
+                this.document[childStart] += childMatcher.group(3);
+            }catch(IndexOutOfBoundsException e){
+                this.document[childStart] += "";
             }
             //and copy it's text
             this.copyTextToDocumentTree(child, childStart, end - 1);
             root.addChild(child);
             //finally, parse it
-            Parser childParser = new Parser(child);
+            DocumentParser childParser = new DocumentParser(child);
             childParser.parse();
 
             childStart = end;
@@ -103,6 +79,7 @@ public class Parser {
 
     private void copyTextToDocumentTree(DocumentTree node, int start, int end){
         for(int i = start; i < this.document.length && i <= end; i++){
+            if(this.document[i] == null || this.document[i].trim().length() < 1){continue;}
             node.appendData(this.document[i]);
         }
     }
@@ -114,7 +91,6 @@ public class Parser {
             String line = this.document[i];
             if(line == null || line.equals("")){ continue;}
             for (DocumentSectionType element : DocumentSectionType.values()){
-                //System.out.println(element.getPattern().toString());
                 matchers.add(element.getPattern().matcher(line));
             }
 
@@ -156,9 +132,16 @@ public class Parser {
         }
         return null;
     }
+    private void removeTrailingDashes(){
+        for(int i = 0; i < this.document.length; i++){
+            this.document[i] = this.document[i].replaceAll("-+$", "");
+        }
+    }
 
     public static boolean isNumeric(String str){
         return str.matches("^(\\d+)\\)?\\.?\\s*");  //match a number with optional bracket or dot and trailing spaces
     }
+
+
 
 }

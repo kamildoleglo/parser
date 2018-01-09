@@ -76,7 +76,7 @@ public enum FunctionTypes {
     }
 
     public Pattern getPattern(){
-        if(this == ARTICLE_RANGE) return Pattern.compile("^(\\w|\\d)+-(\\w|\\d)+\\s?$");
+        if(this == ARTICLE_RANGE) return Pattern.compile("^(\\w|\\d+)-(\\w|\\d+)\\s?$");
         return null;
     }
 }

@@ -10,7 +10,7 @@ public class Main {
             Functions arguments = new Functions(argumentsList);
             arguments.parse();
         }catch (IndexOutOfBoundsException e){
-            throw new IllegalArgumentException("Wrong arguments. For help see -h or --help");
+           System.out.println("Wrong arguments. For help see -h or --help");
         }/*
         String fileName = "src/main/resources/konstytucja.txt";
         DocumentParser documentParser = new DocumentParser(fileName);

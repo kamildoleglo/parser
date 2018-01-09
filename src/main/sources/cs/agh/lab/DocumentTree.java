@@ -101,7 +101,7 @@ public class DocumentTree extends Tree<ArrayList<String>> {
         StringBuilder concatenated = new StringBuilder(512);
         for (int i = 0; i < elements; i++) {
             String line = this.data.get(i);
-            concatenated.append(" ").append(line);
+            concatenated.append(line);
         }
         return concatenated.toString();
     }
@@ -188,10 +188,14 @@ public class DocumentTree extends Tree<ArrayList<String>> {
     }
 
 
-    public void deepPrint() {
+    public void deepPrint(){
+        this.deepPrint("");
+    }
+    public void deepPrint(String prefix) {
+        System.out.print(prefix);
         this.print();
         for (Tree child : this.children) {
-            ((DocumentTree) child).deepPrint();
+            ((DocumentTree) child).deepPrint(prefix + "\t");
         }
     }
 

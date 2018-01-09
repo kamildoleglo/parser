@@ -20,6 +20,7 @@ public class DocumentParser {
             this.document[childStart+1] = "";
             this.joinChapterWithChapterNames = true;
         }
+        this.addTrailingSpaces();
         this.removeTrailingDashes();
     }
 
@@ -144,7 +145,13 @@ public class DocumentParser {
     }
     private void removeTrailingDashes(){
         for(int i = 0; i < this.document.length; i++){
-            this.document[i] = this.document[i].replaceAll("-+$", "");
+            this.document[i] = this.document[i].replaceAll("-+\\s?$", "");
+        }
+    }
+
+    private void addTrailingSpaces(){
+        for(int i = 0; i < this.document.length; i++){
+            this.document[i] = this.document[i] += " ";
         }
     }
 

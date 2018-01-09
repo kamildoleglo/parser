@@ -34,17 +34,16 @@ public class Functions {
     }
 
     public void parse() {
-        if(args.length < 2) return;
+        if (args.length < 2) return;
         if (FunctionTypes.PRINT_TOC.is(this.args[2])) {
             this.printTOC(this.getChapter(3));
-            return;
         } else if (FunctionTypes.PRINT_ELEMENT.is(this.args[2])) {
             if (3 >= this.args.length) {
                 this.root.deepPrint();
                 return;
             }
             if (FunctionTypes.DEEP_PRINT_CHAPTER.is(this.args[3])) {
-                this.getChapter(4).deepPrint();
+                this.getChapter(3).deepPrint();
                 return;
             }
             if (FunctionTypes.ARTICLE.is(this.args[3])) {
@@ -74,7 +73,6 @@ public class Functions {
                 } catch (NullPointerException e) {
                     System.out.println("Cannot find specified element :(");
                 }
-                return;
             }
         } else {
             this.printHelp();
@@ -83,15 +81,17 @@ public class Functions {
 
 
     private DocumentTree getChapter(int index) {
-        try {
-            if (FunctionTypes.CHAPTER.is(args[index])) {
-                return this.root.find(DocumentSectionType.CHAPTER, args[index + 1]);
-            } else {
-                System.out.println("Wrong argument for chapter");
+
+        if (FunctionTypes.CHAPTER.is(args[index]) || FunctionTypes.DEEP_PRINT_CHAPTER.is(args[index])) {
+            DocumentTree object = this.root.find(DocumentSectionType.CHAPTER, args[index + 1]);
+            if(object == null){
+                System.out.println("Cannot find chapter");
             }
-        } catch (IndexOutOfBoundsException e) {
-            return this.root;
+            return object;
+        } else {
+            System.out.println("Wrong argument for chapter");
         }
+
         return null;
     }
 

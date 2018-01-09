@@ -18,7 +18,7 @@ public class Tree<T>{
         this.children.add(child);
     }
 
-    public void addChildren(List<Tree> children) {
+    public void addChildren(int i, List<Tree> children) {
         for(Tree t : children) {
             t.setParent(this);
         }
@@ -27,6 +27,16 @@ public class Tree<T>{
 
     public List<Tree> getChildren() {
         return children;
+    }
+
+    public void replaceChild(Tree element, List<Tree> replacement){
+        for(int i = 0; i < this.children.size(); i++){
+            Tree child = this.children.get(i);
+            if(child == element){
+                this.children.remove(i);
+                this.addChildren(i, replacement);
+            }
+        }
     }
 
     public void setData(T data) {

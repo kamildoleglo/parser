@@ -1,9 +1,7 @@
 package cs.agh.lab;
 
-import javax.print.Doc;
-import java.util.ArrayList;
-import java.util.function.DoubleConsumer;
 
+import java.util.ArrayList;
 
 public class DocumentTree extends Tree<ArrayList<String>> {
     private final DocumentSectionType type;
@@ -68,8 +66,13 @@ public class DocumentTree extends Tree<ArrayList<String>> {
         if(this.deeperThanOrEqual(DocumentSectionType.ARTICLE)){return;}
 
         String articlesRange = (this.type == DocumentSectionType.MAIN) ? "" : "(art. "+ this.firstArticle().getIndex() + " - " + this.lastArticle().getIndex() +")";
+
         String index = (this.type == DocumentSectionType.MAIN || this.type == DocumentSectionType.SUBCHAPTER) ? this.index : this.index+".";
-        System.out.println(this.type.toString() + " " + index + " " + this.concatenateData() + " " + articlesRange);
+        if(this.type == DocumentSectionType.MAIN){
+            System.out.println(this.type.toString() + " " + index + " " + this.concatenateData(1) + " " + articlesRange);
+        }else{
+            System.out.println(this.type.toString() + " " + index + " " + this.concatenateData() + " " + articlesRange);
+        }
         for (int i = 0; i < children.size(); i++) {
             DocumentTree child = (DocumentTree)this.children.get(i);
             child.printTOC();
@@ -78,6 +81,7 @@ public class DocumentTree extends Tree<ArrayList<String>> {
 
     private DocumentTree firstArticle(){
         if(this.type == DocumentSectionType.ARTICLE){return this;}
+
         return ((DocumentTree)this.children.get(0)).firstArticle();
     }
 
@@ -85,10 +89,13 @@ public class DocumentTree extends Tree<ArrayList<String>> {
         if(this.type == DocumentSectionType.ARTICLE){return this;}
         return ((DocumentTree)this.children.get(children.size() - 1)).lastArticle();
     }
-
     private String concatenateData(){
+        return concatenateData(this.data.size());
+    }
+    private String concatenateData(int elements){
         StringBuilder concatenated = new StringBuilder(512);
-        for(String line : this.data){
+        for(int i = 0; i < elements; i++){
+            String line = this.data.get(i);
             concatenated.append(" ").append(line);
         }
         return concatenated.toString();
@@ -101,15 +108,18 @@ public class DocumentTree extends Tree<ArrayList<String>> {
     }
 
     public DocumentTree find(DocumentSectionType type, String index){
-        if(this.type == type && this.index.equals(index)){return this;}
+        if(this.type == type && this.index.equals(index)) return this;
+        DocumentTree node = null;
         for(Tree child : this.children){
-            ((DocumentTree)child).find(type, index);
+            if(((DocumentTree)child).find(type, index) != null){
+                node = ((DocumentTree)child).find(type, index);
+            }
         }
-        return null;
+        return node;
     }
 
     public DocumentTree shallowFind(DocumentSectionType type, String index){
-        if(this.type == type && this.index == index){return this;}
+        if(this.type == type && this.index.equals(index)){return this;}
         for(Tree child : this.children){
             if(((DocumentTree)child).getType() == type && ((DocumentTree)child).getIndex().equals(index)){
                 return (DocumentTree)child;
@@ -122,6 +132,31 @@ public class DocumentTree extends Tree<ArrayList<String>> {
         System.out.print(this.type.toString() + " " + this.index);
         System.out.print((this.type == DocumentSectionType.POINT || this.type == DocumentSectionType.LITERAL) ? ")" : ".");
         System.out.println(this.concatenateData());
+    }
+
+    public void deepPrint(DocumentTree end){
+        if(this.type == end.getType()) this.deepPrint();
+        if(this.equals(end)) return;
+
+        DocumentTree startParent = (DocumentTree) this.parent;
+        while(startParent != null) {
+            Tree[] children = startParent.getChildren().toArray(new Tree[startParent.getChildren().size()]);
+            for (int i = findIndex(this); i < children.length; i++) {
+                ((DocumentTree) children[i]).deepPrint(end);
+            }
+            startParent = (DocumentTree)startParent.getParent();
+        }
+    }
+
+    private Integer findIndex(DocumentTree node){
+        DocumentTree startParent = (DocumentTree)this.parent;
+        Tree[] children = startParent.getChildren().toArray(new Tree[startParent.getChildren().size()]);
+        for(int i = 0; i < children.length; i++){
+            if((children[i]).equals(node)){
+                return i;
+            }
+        }
+        return null;
     }
 
     public void deepPrint(){

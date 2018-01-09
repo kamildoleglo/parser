@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 public class DocumentParser {
     private String[] document;
     private DocumentTree root;
+    private boolean joinChapterWithChapterNames = false;
 
     public DocumentParser(String fileName){
         this.document = DocumentFilter.filter(fileName);
@@ -17,12 +18,14 @@ public class DocumentParser {
         if(this.document[childStart].contentEquals("KONSTYTUCJA") && childStart+1 < this.document.length){
             this.document[childStart] += " " + this.document[childStart+1];
             this.document[childStart+1] = "";
+            this.joinChapterWithChapterNames = true;
         }
         this.removeTrailingDashes();
     }
 
-    public DocumentParser(DocumentTree root){
+    public DocumentParser(DocumentTree root, boolean join){
         this.root = root;
+        this.joinChapterWithChapterNames = join;
         this.document = root.getData().toArray(new String[root.getData().size()]);
     }
 
@@ -65,11 +68,18 @@ public class DocumentParser {
             this.copyTextToDocumentTree(child, childStart, end - 1);
             root.addChild(child);
             //finally, parse it
-            DocumentParser childParser = new DocumentParser(child);
+            DocumentParser childParser = new DocumentParser(child, joinChapterWithChapterNames);
             childParser.parse();
 
             childStart = end;
         }while(childStart != this.document.length);
+
+        if(this.root.getType() == DocumentSectionType.CHAPTER && this.joinChapterWithChapterNames){
+            DocumentTree nameNode = (DocumentTree)this.root.getChildren().get(0);
+            this.root.removeData();
+            this.root.appendData(nameNode.getIndex());
+            this.root.replaceChild(nameNode, nameNode.getChildren());
+        }
 
     }
 
@@ -141,7 +151,5 @@ public class DocumentParser {
     public static boolean isNumeric(String str){
         return str.matches("^(\\d+)\\)?\\.?\\s*");  //match a number with optional bracket or dot and trailing spaces
     }
-
-
 
 }

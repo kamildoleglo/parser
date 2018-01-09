@@ -3,10 +3,12 @@ package cs.agh.lab;
 import java.util.regex.Pattern;
 
 public enum FunctionTypes {
-    OPEN_FILENAME, PRINT_TOC, ARTICLE_RANGE, PRINT_ELEMENT, DEEP_PRINT_CHAPTER, ARTICLE, CHAPTER, SECTION, LITERAL, PARAGRAPH, POINT ;
+    HELP, OPEN_FILENAME, PRINT_TOC, ARTICLE_RANGE, PRINT_ELEMENT, DEEP_PRINT_CHAPTER, ARTICLE, CHAPTER, SECTION, LITERAL, PARAGRAPH, POINT ;
 
     public String toString(){
         switch(this){
+            case HELP:
+                return "-h";
             case OPEN_FILENAME:
                 return "-f";
             case PRINT_TOC:
@@ -41,6 +43,8 @@ public enum FunctionTypes {
 
     public String toLongString(){
         switch(this){
+            case HELP:
+                return "--help";
             case OPEN_FILENAME:
                 return "--filename";
             case PRINT_TOC:

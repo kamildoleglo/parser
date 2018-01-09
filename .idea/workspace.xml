@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="60f48550-aba3-4bca-8e0d-7a524453ddbc" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentParser.java" afterPath="$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentParser.java" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/bin/cs/agh/lab/DocumentTree.class" afterPath="$PROJECT_DIR$/bin/cs/agh/lab/DocumentTree.class" />
       <change beforePath="$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentTree.java" afterPath="$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentTree.java" />
-      <change beforePath="$PROJECT_DIR$/src/main/sources/cs/agh/lab/Functions.java" afterPath="$PROJECT_DIR$/src/main/sources/cs/agh/lab/Functions.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -75,8 +75,8 @@
       <file leaf-file-name="DocumentTree.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1382">
-              <caret line="103" column="24" lean-forward="false" selection-start-line="103" selection-start-column="24" selection-end-line="103" selection-end-column="24" />
+            <state relative-caret-position="216">
+              <caret line="197" column="57" lean-forward="false" selection-start-line="197" selection-start-column="57" selection-end-line="197" selection-end-column="57" />
               <folding>
                 <element signature="e#693#694#0" expanded="true" />
                 <element signature="e#725#726#0" expanded="true" />
@@ -199,8 +199,8 @@
         <option value="$PROJECT_DIR$/src/main/sources/cs/agh/lab/OptionsFilter.java" />
         <option value="$PROJECT_DIR$/src/main/sources/cs/agh/lab/Main.java" />
         <option value="$PROJECT_DIR$/src/main/sources/cs/agh/lab/Functions.java" />
-        <option value="$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentTree.java" />
         <option value="$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentParser.java" />
+        <option value="$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentTree.java" />
       </list>
     </option>
   </component>
@@ -505,12 +505,12 @@
       <workItem from="1515366214609" duration="4958000" />
       <workItem from="1515395240889" duration="459000" />
       <workItem from="1515405240927" duration="60524000" />
-      <workItem from="1515486471162" duration="4742000" />
+      <workItem from="1515486471162" duration="4942000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="122601000" />
+    <option name="totallyTimeSpent" value="122801000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
@@ -913,8 +913,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/sources/cs/agh/lab/DocumentTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1382">
-          <caret line="103" column="24" lean-forward="false" selection-start-line="103" selection-start-column="24" selection-end-line="103" selection-end-column="24" />
+        <state relative-caret-position="216">
+          <caret line="197" column="57" lean-forward="false" selection-start-line="197" selection-start-column="57" selection-end-line="197" selection-end-column="57" />
           <folding>
             <element signature="e#693#694#0" expanded="true" />
             <element signature="e#725#726#0" expanded="true" />

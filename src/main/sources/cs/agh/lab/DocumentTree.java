@@ -195,7 +195,7 @@ public class DocumentTree extends Tree<ArrayList<String>> {
         System.out.print(prefix);
         this.print();
         for (Tree child : this.children) {
-            ((DocumentTree) child).deepPrint(prefix + "\t");
+            ((DocumentTree) child).deepPrint(prefix + "  ");
         }
     }
 

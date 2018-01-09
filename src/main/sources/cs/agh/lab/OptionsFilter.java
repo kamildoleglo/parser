@@ -20,7 +20,7 @@ public class OptionsFilter {
                     break;
                 }
             }
-            if(!flag){ throw new IllegalArgumentException(arg + " is not a valid argument"); }
+            if(!flag){ System.out.println(arg + " is not a valid argument"); return null; }
             args.add(arg);
         }
         return args;

@@ -6,11 +6,12 @@ public class Main {
 
     public static void main(String args[]) {
         List<String> argumentsList = OptionsFilter.filter(args);
-        try{
+        try {
             Functions arguments = new Functions(argumentsList);
             arguments.parse();
-        }catch (IndexOutOfBoundsException e){
-           System.out.println("Wrong arguments. For help see -h or --help");
+        } catch (IndexOutOfBoundsException | NullPointerException e) {
+            if (e instanceof IndexOutOfBoundsException) System.out.println("Wrong arguments. For help see -h or --help");
+
         }/*
         String fileName = "src/main/resources/konstytucja.txt";
         DocumentParser documentParser = new DocumentParser(fileName);

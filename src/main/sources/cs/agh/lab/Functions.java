@@ -2,7 +2,6 @@ package cs.agh.lab;
 
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Functions {
 
@@ -35,6 +34,7 @@ public class Functions {
     }
 
     public void parse() {
+        if(args.length < 2) return;
         if (FunctionTypes.PRINT_TOC.is(this.args[2])) {
             this.printTOC(this.getChapter(3));
             return;
@@ -52,18 +52,10 @@ public class Functions {
                 if (rangeMatcher.matches()) {
                     DocumentTree startNode = this.root.find(DocumentSectionType.ARTICLE, rangeMatcher.group(1));
                     DocumentTree endNode = this.root.find(DocumentSectionType.ARTICLE, rangeMatcher.group(2));
-                    if (endNode == null) {
-                        endNode = this.root.lastArticle();
+                    if (startNode == null || endNode == null) {
+                        System.out.print("Cannot find specified range");
                     }
-                    Pattern numberPattern = Pattern.compile("^(\\d+)\\w?");
-                    Integer startIndex, endIndex;
-                    Matcher startMatcher = numberPattern.matcher(startNode.getIndex());
-                    Matcher endMatcher = numberPattern.matcher(endNode.getIndex());
-                    startMatcher.find();
-                    endMatcher.find();
-                    startIndex = Integer.parseInt(startMatcher.group(1));
-                    endIndex = Integer.parseInt(endMatcher.group(1));
-                    this.root.deepPrint(startNode, endNode, startIndex, endIndex);
+                    this.root.deepPrint(startNode, endNode);
                     return;
                 }
                 try {

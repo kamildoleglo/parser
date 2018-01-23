@@ -63,9 +63,12 @@ public class DocumentTree extends Tree<ArrayList<String>> {
         if (this.deeperThanOrEqual(DocumentSectionType.ARTICLE)) {
             return;
         }
-
-        String articlesRange = (this.type == DocumentSectionType.MAIN) ? "" : "(art. " + this.firstArticle().getIndex() + " - " + this.lastArticle().getIndex() + ")";
-
+        String articlesRange;
+        try {
+            articlesRange = (this.type == DocumentSectionType.MAIN) ? "" : "(art. " + this.firstArticle().getIndex() + " - " + this.lastArticle().getIndex() + ")";
+        } catch (NullPointerException e) {
+            articlesRange = "";
+        }
         String index = (this.type == DocumentSectionType.MAIN || this.type == DocumentSectionType.SUBCHAPTER) ? this.index : this.index + ".";
         if (this.type == DocumentSectionType.MAIN) {
             System.out.println(this.type.toString() + " " + index + " " + this.concatenateData(1) + " " + articlesRange);
@@ -83,14 +86,27 @@ public class DocumentTree extends Tree<ArrayList<String>> {
             return this;
         }
 
-        return ((DocumentTree) this.children.get(0)).firstArticle();
+        DocumentTree firstArticle;
+        try {
+            firstArticle = ((DocumentTree) this.children.get(0)).firstArticle();
+        } catch (IndexOutOfBoundsException e) {
+            firstArticle = null;
+        }
+        return firstArticle;
     }
 
     public DocumentTree lastArticle() {
         if (this.type == DocumentSectionType.ARTICLE) {
             return this;
         }
-        return ((DocumentTree) this.children.get(children.size() - 1)).lastArticle();
+
+        DocumentTree lastArticle;
+        try {
+            lastArticle = ((DocumentTree) this.children.get(children.size() - 1)).lastArticle();
+        } catch (IndexOutOfBoundsException e) {
+            lastArticle = null;
+        }
+        return lastArticle;
     }
 
     private String concatenateData() {
@@ -188,9 +204,10 @@ public class DocumentTree extends Tree<ArrayList<String>> {
     }
 
 
-    public void deepPrint(){
+    public void deepPrint() {
         this.deepPrint("");
     }
+
     public void deepPrint(String prefix) {
         System.out.print(prefix);
         this.print();

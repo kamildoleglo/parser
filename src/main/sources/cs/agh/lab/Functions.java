@@ -36,7 +36,11 @@ public class Functions {
     public void parse() {
         if (args.length < 2) return;
         if (FunctionTypes.PRINT_TOC.is(this.args[2])) {
-            this.printTOC(this.getChapter(3));
+            try {
+                this.printTOC(this.getChapter(3));
+            }catch (IndexOutOfBoundsException e){
+                this.printTOC(root);
+            }
         } else if (FunctionTypes.PRINT_ELEMENT.is(this.args[2])) {
             if (3 >= this.args.length) {
                 this.root.deepPrint();

@@ -110,10 +110,11 @@ public class DocumentParser {
             while(matcher.hasNext()){
                 try {
                     if (matcher.next().matches()) {
+                        //System.out.println(line);
                         return i;
                     }
                 }catch(NullPointerException e){
-                    e.getSuppressed();
+                    //e.getSuppressed();
                 }
             }
             matchers.clear();
@@ -127,6 +128,7 @@ public class DocumentParser {
             String line = this.document[i];
             Matcher typeMatcher = typePattern.matcher(line);
             if(typeMatcher.matches()){
+                //System.out.println("same level: "+ line);
                 return i;
             }
         }

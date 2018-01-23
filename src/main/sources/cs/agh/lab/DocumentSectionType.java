@@ -25,9 +25,9 @@ public enum DocumentSectionType {
             case ARTICLE:
                 return Pattern.compile("^Art\\.\\s+([0-9]+[A-z]*)\\.\\s*([0-9]+\\.)?(.*)");
             case CHAPTER:
-                return Pattern.compile("^Rozdział\\s+([0-9|A-z]+)");
+                return Pattern.compile("^Rozdział\\s+([0-9|A-z|a-z]+)\\s*");
             case SECTION:
-                return Pattern.compile("^DZIAŁ\\s+([0-9|A-z]+)");
+                return Pattern.compile("^DZIAŁ\\s+([0-9|A-z]+)\\s*");
             case PARAGRAPH:
                 return Pattern.compile("^(\\d+)\\.()(.*)");
             case POINT:

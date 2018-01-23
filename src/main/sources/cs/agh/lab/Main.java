@@ -11,7 +11,7 @@ public class Main {
             Functions arguments = new Functions(argumentsList);
             arguments.parse();
         } catch (IndexOutOfBoundsException | NullPointerException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             if (e instanceof IndexOutOfBoundsException) System.out.println("Wrong arguments. For help see -h or --help");
 
         }
